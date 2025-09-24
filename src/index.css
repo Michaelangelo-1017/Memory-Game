@@ -26,7 +26,8 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
+  min-width: 100vw;
+  
   min-height: 100vh;
   background: linear-gradient(to bottom,#ffde00 0%, #ffde00 0.5%, #3b4cca 10%,#3b4cca 95%);
   background-size: contain;

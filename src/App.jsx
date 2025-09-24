@@ -17,9 +17,13 @@ function App() {
   const [score,setScore] = useState(0);
   const [bestScore,setBestScore] = useState(0);
   const [haveWon,setHaveWon] = useState(false);
+  const [first12Names,setFirst12Names] = useState([]);
+  
+  
   function handleCardClick(name){
     setClickCount(c => c+1);
     if(score+1 == 12){
+      setBestScore(12);
       setHaveWon(true);
     }
     if(!clickedCards.includes(name)){
@@ -34,10 +38,26 @@ function App() {
       }
     }
   }
-  useEffect(() => {
-      const pokemonArray = ['pikachu','bulbasaur','charmander','squirtle','jigglypuff','meowth','psyduck','snorlax','eevee','gengar','mewtwo','lucario'];
-    const shuffled = shuffle(pokemonArray);
 
+  /*function handleReset(){
+    setHaveWon(false);
+    setBestScore(0);
+    setScore(0);
+    setClickedCards([]);
+    setClickCount(0);
+  }*/
+
+  
+
+  useEffect(() => {
+    const pokemonArray = ["bulbasaur","ivysaur","venusaur", "charmander","charmeleon","charizard","squirtle","wartortle","blastoise","caterpie","metapod","butterfree","weedle","kakuna","beedrill","pidgey","pidgeotto","pidgeot","rattata","raticate","spearow","fearow","ekans","arbok","pikachu","raichu","sandshrew","sandslash","nidoran-f","nidorina"];
+    const shuffled = shuffle(pokemonArray);
+    setFirst12Names(shuffled.slice(0,12))
+  }, [])
+
+  useEffect(() => {
+    if(first12Names.length === 0) return;
+    const shuffled = shuffle(first12Names);
     Promise.all(
       shuffled.map(name=> 
         fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
@@ -47,15 +67,15 @@ function App() {
       .then(results => setData(results))
       .catch((err) => console.error(err));
     }
-    , [clickCount]);
+    , [clickCount,first12Names]);
 
   return (
     <div className='main-container'>
       <h1>Pokémon Memory Game</h1>
       <p>Get points by clicking on an image but don't click on any more than once!</p>
-      <div>
-        <p>Score: {score}</p>
-        <p>Best Score: {bestScore}</p>
+      <div className='scores'>
+        <span>Score: {score}</span>
+        <span>Best Score: {bestScore}</span>
       </div>
       <div className={haveWon ?'cards-container disabled' : 'cards-container'}>
         {data.map(pokemon => (
@@ -68,7 +88,11 @@ function App() {
       )
       )}
       </div>
-      <p>The Array now is : {JSON.stringify(clickedCards)}</p>
+      <div className={haveWon ? 'winner-display' : 'winner-display disabled'}>
+        <h2>YOU WIN!!!!!!!</h2>
+        <p>Would you like to restart?</p>
+        <button type='button' onClick={() => window.location.reload()}id='reset-button'>Restart?</button>
+      </div>
     </div>
   );
 }
