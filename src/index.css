@@ -25,12 +25,12 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  flex-direction: column;
   place-items: center;
-  min-width: 100vw;
-  
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(to bottom,#ffde00 0%, #ffde00 0.5%, #3b4cca 10%,#3b4cca 95%);
-  background-size: contain;
+  
 }
 
 h1 {
